@@ -10,17 +10,19 @@ echo "Building on architecture: $ARCH"
 # Install system dependencies if needed
 if command -v apt-get &> /dev/null; then
     echo "Installing dependencies via apt-get..."
-    sudo apt-get update || true
-    sudo apt-get install -y python3 python3-pip python3-tk wget fuse libfuse2 || true
+    if ! sudo apt-get update; then
+        echo "Warning: apt-get update failed, continuing anyway..."
+    fi
+    sudo apt-get install -y python3 python3-pip python3-tk wget fuse libfuse2 || echo "Warning: Some packages may not have installed"
 elif command -v yum &> /dev/null; then
     echo "Installing dependencies via yum..."
-    yum install -y python3 python3-pip python3-tkinter wget fuse fuse-libs || true
+    yum install -y python3 python3-pip python3-tkinter wget fuse fuse-libs || echo "Warning: Some packages may not have installed"
 fi
 
 # Install Python dependencies
 echo "Installing Python dependencies..."
-pip3 install --upgrade pip
-pip3 install pyinstaller
+pip3 install --upgrade pip || echo "Warning: pip upgrade failed"
+pip3 install pyinstaller==6.11.1
 
 # Clean previous builds
 echo "Cleaning previous builds..."
