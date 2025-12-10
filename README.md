@@ -13,8 +13,8 @@ Python software for Raspberry Pi OS to receive and display vitals from pysender 
 
 ### Option 1: Download Pre-built Executable (Recommended)
 
-1. Go to the [Actions](../../actions) tab in this repository
-2. Click on the latest successful build workflow run
+1. Go to the Actions tab in this GitHub repository
+2. Click on the latest successful "Build PiObs Executable for Raspberry Pi" workflow run
 3. Download the `piobs-arm64-executable` artifact
 4. Extract the artifact and transfer the `piobs` file to your Raspberry Pi
 5. Make it executable (if not already):
