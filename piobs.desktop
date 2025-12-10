@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PiObs Vitals Monitor
+Comment=Receive and display vitals from pysender
+Exec=piobs
+Icon=piobs
+Type=Application
+Categories=Utility;Monitor;
+Terminal=false

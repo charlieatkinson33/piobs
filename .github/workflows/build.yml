@@ -17,20 +17,19 @@ jobs:
       # Build in ARM container
       - name: Build AppImage
         run: |
-          docker run --platform linux/arm64 -v $(pwd):/app -w /app quay.io/pypa/manylinux2014_aarch64 bash -c "
-            yum install -y wget fuse fuse-libs fuse-devel squashfs-tools
-            wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-aarch64.AppImage -O appimagetool
-            chmod +x appimagetool
-            pip install pyinstaller
-            pyinstaller --onefile --add-data '/usr/lib/python3.8/lib-dynload/*:.' piobs.py
-            mkdir -p AppDir/usr/bin
-            cp dist/piobs AppDir/usr/bin/
-            ./appimagetool AppDir PiObs-Monitor.AppImage
-          "
-          ls -l *.AppImage
+          docker run --platform linux/arm64 --rm \
+            -v $(pwd):/app -w /app \
+            -e DEBIAN_FRONTEND=noninteractive \
+            ubuntu:22.04 bash -c "
+              apt-get update && \
+              apt-get install -y python3 python3-pip python3-tk wget file libfuse2 && \
+              chmod +x /app/build-appimage.sh && \
+              /app/build-appimage.sh
+            "
+          ls -lh *.AppImage
 
       # Upload AppImage as artifact
       - uses: actions/upload-artifact@v4
         with:
-          name: piobs-appimage
-          path: PiObs-Monitor.AppImage
+          name: piobs-appimage-arm64
+          path: PiObs-Monitor-*.AppImage
