@@ -1,0 +1,36 @@
+name: Build PiObs AppImage for Raspberry Pi
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Set up ARM emulation for Raspberry Pi
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      # Build in ARM container
+      - name: Build AppImage
+        run: |
+          docker run --platform linux/arm64 -v $(pwd):/app -w /app quay.io/pypa/manylinux2014_aarch64 bash -c "
+            yum install -y wget fuse fuse-libs fuse-devel squashfs-tools
+            wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-aarch64.AppImage -O appimagetool
+            chmod +x appimagetool
+            pip install pyinstaller
+            pyinstaller --onefile --add-data '/usr/lib/python3.8/lib-dynload/*:.' piobs.py
+            mkdir -p AppDir/usr/bin
+            cp dist/piobs AppDir/usr/bin/
+            ./appimagetool AppDir PiObs-Monitor.AppImage
+          "
+          ls -l *.AppImage
+
+      # Upload AppImage as artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: piobs-appimage
+          path: PiObs-Monitor.AppImage
