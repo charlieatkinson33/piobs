@@ -7,13 +7,21 @@ echo "=== Building PiObs AppImage for Raspberry Pi (ARM64) ==="
 ARCH=$(uname -m)
 echo "Building on architecture: $ARCH"
 
+# Check for ARM64 environment
+if [ "$ARCH" != "aarch64" ] && [ "$ARCH" != "arm64" ]; then
+    echo "ERROR: This build script is designed for ARM64 (aarch64) architecture."
+    echo "Current architecture: $ARCH"
+    echo "Please run this script on a Raspberry Pi or ARM64-capable environment."
+    exit 1
+fi
+
 # Install system dependencies if needed
 if command -v apt-get &> /dev/null; then
     echo "Installing dependencies via apt-get..."
-    if ! sudo apt-get update; then
+    if ! apt-get update; then
         echo "Warning: apt-get update failed, continuing anyway..."
     fi
-    sudo apt-get install -y python3 python3-pip python3-tk wget fuse libfuse2 || echo "Warning: Some packages may not have installed"
+    apt-get install -y python3 python3-pip python3-tk wget fuse libfuse2 || echo "Warning: Some packages may not have installed"
 elif command -v yum &> /dev/null; then
     echo "Installing dependencies via yum..."
     yum install -y python3 python3-pip python3-tkinter wget fuse fuse-libs || echo "Warning: Some packages may not have installed"
