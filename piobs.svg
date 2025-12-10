@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="256" height="256" fill="#2c3e50" rx="20"/>
+  <g transform="translate(128, 128)">
+    <!-- Heart rate wave -->
+    <path d="M -80,0 L -60,0 L -50,-40 L -40,60 L -30,-30 L -20,0 L 80,0" 
+          stroke="#e74c3c" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Plus symbol for medical -->
+    <g transform="translate(0, 40)">
+      <rect x="-5" y="-25" width="10" height="50" fill="#ffffff"/>
+      <rect x="-25" y="-5" width="50" height="10" fill="#ffffff"/>
+    </g>
+  </g>
+  <!-- Text -->
+  <text x="128" y="200" font-family="Arial, sans-serif" font-size="36" fill="#ecf0f1" 
+        text-anchor="middle" font-weight="bold">PiObs</text>
+</svg>

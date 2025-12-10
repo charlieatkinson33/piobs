@@ -1,0 +1,12 @@
+#!/bin/bash
+# AppRun script for PiObs AppImage
+
+SELF=$(readlink -f "$0")
+HERE=${SELF%/*}
+
+# Export library paths
+export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"
+export PATH="${HERE}/usr/bin:${PATH}"
+
+# Run the application
+exec "${HERE}/usr/bin/piobs" "$@"
