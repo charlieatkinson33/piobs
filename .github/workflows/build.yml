@@ -1,4 +1,4 @@
-name: Build PiObs AppImage for Raspberry Pi
+name: Build PiObs Executable for Raspberry Pi
 
 on: [push]
 
@@ -14,23 +14,23 @@ jobs:
         with:
           platforms: arm64
 
-      # Build in ARM container
-      - name: Build AppImage
+      # Build executable in ARM container
+      - name: Build ARM64 Executable
         run: |
-          docker run --platform linux/arm64 -v $(pwd):/app -w /app quay.io/pypa/manylinux2014_aarch64 bash -c "
-            yum install -y wget fuse fuse-libs fuse-devel squashfs-tools
-            wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-aarch64.AppImage -O appimagetool
-            chmod +x appimagetool
+          docker run --platform linux/arm64 -v $(pwd):/app -w /app python:3.9-slim bash -c "
+            apt-get update && apt-get install -y binutils
             pip install pyinstaller
-            pyinstaller --onefile --add-data '/usr/lib/python3.8/lib-dynload/*:.' piobs.py
-            mkdir -p AppDir/usr/bin
-            cp dist/piobs AppDir/usr/bin/
-            ./appimagetool AppDir PiObs-Monitor.AppImage
+            pyinstaller --onefile --name piobs piobs.py
           "
-          ls -l *.AppImage
+          ls -lh dist/
+          file dist/piobs
 
-      # Upload AppImage as artifact
+      # Make executable
+      - name: Set executable permissions
+        run: chmod +x dist/piobs
+
+      # Upload executable as artifact
       - uses: actions/upload-artifact@v4
         with:
-          name: piobs-appimage
-          path: PiObs-Monitor.AppImage
+          name: piobs-arm64-executable
+          path: dist/piobs
