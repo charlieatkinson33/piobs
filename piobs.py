@@ -5,6 +5,7 @@ import time
 import os
 import subprocess
 from queue import Queue
+import random
 
 # --- Vital placeholders
 vitals = {
@@ -84,11 +85,44 @@ def tcp_server():
 
 Thread(target=tcp_server, daemon=True).start()
 
+# --- Loading Screen
+def show_loading_screen():
+    loading_window = tk.Tk()
+    loading_window.title("Loading...")
+    loading_window.configure(bg="black")
+    loading_window.overrideredirect(True)
+    loading_window.attributes("-fullscreen", True)
+    loading_window.lift()
+    loading_window.focus_force()
+    loading_window.geometry(f"{loading_window.winfo_screenwidth()}x{loading_window.winfo_screenheight()}+0+0")
+    
+    screen_width = loading_window.winfo_screenwidth()
+    screen_height = loading_window.winfo_screenheight()
+    
+    # Calculate font size based on screen height
+    font_size = int(screen_height * 0.08)
+    loading_font = ("Helvetica", font_size, "bold")
+    
+    # Create the humorous message
+    message = "charlie is a genius,\nbow down"
+    loading_label = tk.Label(loading_window, text=message, fg="lime", bg="black", font=loading_font, justify="center")
+    loading_label.place(relx=0.5, rely=0.5, anchor="center")
+    
+    # Random loading time between 5 and 10 seconds
+    loading_time = random.randint(5000, 10000)
+    
+    # Close the loading screen after the specified time
+    loading_window.after(loading_time, loading_window.destroy)
+    loading_window.mainloop()
+
 # --- GUI Setup
 def start_gui():
     if not start_wifi_ap():
         print("[Pi] Failed to start AP. Exiting GUI.")
         return
+
+    # Show loading screen first
+    show_loading_screen()
 
     root = tk.Tk()
     root.title("Vitals Monitor")
