@@ -96,7 +96,6 @@ def show_loading_screen():
     loading_window.focus_force()
     loading_window.geometry(f"{loading_window.winfo_screenwidth()}x{loading_window.winfo_screenheight()}+0+0")
     
-    screen_width = loading_window.winfo_screenwidth()
     screen_height = loading_window.winfo_screenheight()
     
     # Calculate font size based on screen height
@@ -111,9 +110,10 @@ def show_loading_screen():
     # Random loading time between 5 and 10 seconds
     loading_time = random.randint(5000, 10000)
     
-    # Close the loading screen after the specified time
-    loading_window.after(loading_time, loading_window.destroy)
+    # Close the loading screen after the specified time and quit the mainloop
+    loading_window.after(loading_time, loading_window.quit)
     loading_window.mainloop()
+    loading_window.destroy()
 
 # --- GUI Setup
 def start_gui():
