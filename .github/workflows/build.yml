@@ -14,12 +14,13 @@ jobs:
         with:
           platforms: arm64
 
-      # Build in ARM container
+      # Build AppImage (cross-compile for ARM64 from x86_64 host)
       - name: Build AppImage
         run: |
           docker run --platform linux/arm64 --rm \
             -v $(pwd):/app -w /app \
             -e DEBIAN_FRONTEND=noninteractive \
+            -e TARGET_ARCH=aarch64 \
             ubuntu:22.04 bash -c "
               apt-get update && \
               apt-get install -y python3 python3-pip python3-tk wget file libfuse2 && \
